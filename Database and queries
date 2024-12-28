@@ -1,0 +1,322 @@
+create database blood_bank_database;
+use blood_bank_database;
+
+-- Creating the BB_Manager table
+CREATE TABLE BB_Manager (
+    M_id INT NOT NULL PRIMARY KEY,
+    mName VARCHAR(100) NOT NULL,
+    m_phNo BIGINT NOT NULL
+);
+
+-- Inserting data into BB_Manager
+INSERT INTO BB_Manager VALUES
+(102, 'Jack', 4693959671),
+(103, 'Peter', 4693959601),
+(104, 'Mark', 4693959677),
+(105, 'Jason', 4693957671),
+(106, 'Steve', 4694959671),
+(107, 'Jason', 4695959671),
+(108, 'Stella', 4663959671),
+(109, 'Monika', 4673959671),
+(110, 'John', 4693859671);
+
+-- Creating the Blood_Donor table
+CREATE TABLE Blood_Donor (
+    bd_ID INT NOT NULL PRIMARY KEY,
+    bd_name VARCHAR(100) NOT NULL,
+    bd_age INT NOT NULL,
+    bd_sex CHAR(1) NOT NULL,
+    bd_Bgroup VARCHAR(10) NOT NULL,
+    bd_reg_date DATE NOT NULL,
+    reco_ID INT NOT NULL,
+    City_ID INT NOT NULL,
+    donation_frequency INT DEFAULT 0 CHECK (donation_frequency >= 0)
+);
+
+-- Inserting data into Blood_Donor
+INSERT INTO Blood_Donor VALUES
+(150221, 'Mark', 25, 'M', 'B+', '2015-12-17', 101212, 1100, 3),
+(160011, 'Abdul', 35, 'M', 'A+', '2016-11-22', 101212, 1100, 5),
+(160101, 'Smith', 22, 'M', 'O+', '2016-01-04', 101312, 1200, 2),
+(150011, 'Pat', 29, 'M', 'O+', '2015-07-19', 101412, 1300, 1),
+(150021, 'Shyam', 42, 'F', 'A-', '2015-12-24', 101412, 1300, 6),
+(150121, 'Dan', 44, 'M', 'AB+', '2015-08-28', 101212, 1200, 4),
+(160031, 'Mike', 33, 'M', 'AB-', '2016-02-06', 101212, 1400, 7),
+(160301, 'Elisa', 31, 'F', 'AB+', '2016-09-10', 101312, 1200, 2),
+(160091, 'Carrol', 24, 'M', 'B-', '2016-10-15', 101312, 1500, 1),
+(160401, 'Mark', 29, 'M', 'O-', '2016-12-17', 101212, 1200, 8);
+
+-- Creating the BloodSpecimen table
+CREATE TABLE BloodSpecimen (
+    specimen_number INT NOT NULL PRIMARY KEY,
+    b_group VARCHAR(10) NOT NULL,
+    status ENUM('Pending', 'Approved') NOT NULL,
+    dfind_ID INT NOT NULL,
+    M_id INT NOT NULL
+);
+
+-- Inserting data into BloodSpecimen
+INSERT INTO BloodSpecimen VALUES
+(1001, 'B+', 'Approved', 11, 101),
+(1002, 'O+', 'Pending', 12, 102),
+(1003, 'AB+', 'Approved', 11, 102),
+(1004, 'O-', 'Approved', 13, 103),
+(1005, 'A+', 'Pending', 14, 101),
+(1006, 'A-', 'Approved', 13, 104),
+(1007, 'AB-', 'Approved', 15, 104),
+(1008, 'AB-', 'Pending', 11, 105),
+(1009, 'B+', 'Approved', 13, 105),
+(1010, 'O+', 'Pending', 12, 105);
+
+-- Creating the City table
+CREATE TABLE City (
+    City_ID INT NOT NULL PRIMARY KEY,
+    City_name VARCHAR(100) NOT NULL
+);
+
+-- Inserting data into City
+INSERT INTO City VALUES
+(1200, 'Austin'),
+(1300, 'Irving'),
+(1400, 'Houston'),
+(1500, 'Richardson'),
+(1600, 'Plano'),
+(1700, 'Frisco'),
+(1800, 'Arlington'),
+(1900, 'San Antonio'),
+(2000, 'Allen');
+
+-- Creating the DiseaseFinder table
+CREATE TABLE DiseaseFinder (
+    dfind_ID INT NOT NULL PRIMARY KEY,
+    dfind_name VARCHAR(100) NOT NULL,
+    dfind_PhNo BIGINT NOT NULL
+);
+
+-- Inserting data into DiseaseFinder
+INSERT INTO DiseaseFinder VALUES
+(11, 'Peter', 4693804223),
+(12, 'Park', 4693804223),
+(13, 'Jerry', 4693804223),
+(14, 'Mark', 4693804223),
+(15, 'Monika', 4693804223);
+
+-- Creating the Hospital_Info_1 table
+CREATE TABLE Hospital_Info_1 (
+    hosp_ID INT NOT NULL PRIMARY KEY,
+    hosp_name VARCHAR(100) NOT NULL,
+    City_ID INT NOT NULL,
+    M_id INT NOT NULL
+);
+
+-- Inserting data into Hospital_Info_1
+INSERT INTO Hospital_Info_1 VALUES
+(1, 'MayoClinic', 1200, 101),
+(2, 'CleavelandClinic', 1300, 103),
+(3, 'NYU', 1400, 103),
+(4, 'Baylor', 1500, 104),
+(5, 'Charlton', 1800, 103);
+
+-- Creating the Recipient table
+CREATE TABLE Recipient (
+    reci_ID INT NOT NULL PRIMARY KEY,
+    reci_name VARCHAR(100) NOT NULL,
+    reci_age INT NOT NULL,
+    reci_Brgp VARCHAR(10) NOT NULL,
+    reci_Bqnty FLOAT NOT NULL,
+    reco_ID INT NOT NULL,
+    City_ID INT NOT NULL,
+    M_id INT NOT NULL,
+    reci_sex CHAR(1) NOT NULL,
+    reci_reg_date DATE NOT NULL,
+    urgency_level ENUM('Low', 'Medium', 'High') DEFAULT 'Medium'
+);
+
+-- Inserting data into Recipient
+INSERT INTO Recipient VALUES
+(10001, 'Mark', 25, 'B+', 1.5, 101212, 1100, 101, 'M', '2015-12-17', 'High'),
+(10002, 'Dan', 60, 'A+', 1, 101312, 1100, 102, 'M', '2015-12-16', 'Low'),
+(10003, 'Steve', 35, 'AB+', 0.5, 101312, 1200, 102, 'M', '2015-10-17', 'Medium');
+
+-- Creating the Blood_Inventory table
+CREATE TABLE Blood_Inventory (
+    inventory_id INT NOT NULL PRIMARY KEY,
+    blood_group VARCHAR(10) NOT NULL,
+    quantity INT NOT NULL,
+    storage_location VARCHAR(100) NOT NULL
+);
+
+-- Inserting data into Blood_Inventory
+INSERT INTO Blood_Inventory VALUES
+(1, 'B+', 10, 'Storage A'),
+(2, 'O+', 15, 'Storage B'),
+(3, 'A-', 5, 'Storage C'),
+(4, 'AB+', 8, 'Storage D');
+
+-- Creating the Blood_Request table
+CREATE TABLE Blood_Request (
+    request_id INT NOT NULL PRIMARY KEY,
+    reci_ID INT NOT NULL,
+    blood_group VARCHAR(10) NOT NULL,
+    quantity_requested INT NOT NULL,
+    status ENUM('Pending', 'Fulfilled') DEFAULT 'Pending'
+);
+
+-- Inserting data into Blood_Request
+INSERT INTO Blood_Request VALUES
+(1, 10001, 'B+', 2, 'Fulfilled'),
+(2, 10002, 'A+', 1, 'Pending'),
+(3, 10003, 'AB+', 3, 'Pending');
+
+-- Creating the Donor_Visit table
+CREATE TABLE Donor_Visit (
+    visit_id INT NOT NULL PRIMARY KEY,
+    bd_ID INT NOT NULL,
+    visit_date DATE NOT NULL,
+    blood_quantity_donated FLOAT NOT NULL
+);
+
+-- Inserting data into Donor_Visit
+INSERT INTO Donor_Visit VALUES
+(1, 150221, '2023-01-15', 1.5),
+(2, 160011, '2023-02-20', 2.0),
+(3, 150021, '2023-03-10', 1.0);
+
+
+-- updations:
+
+INSERT INTO Donor_Visit VALUES
+(4, 150221, '2023-04-10', 1.0),
+(5, 160011, '2023-05-15', 1.5);
+
+-- ## Questions and Insights:
+
+-- 1. Which donors have donated blood more than once, and what is the total quantity donated by them?
+SELECT 
+    bd.bd_name, 
+    SUM(dv.blood_quantity_donated) AS total_donated
+FROM 
+    Blood_Donor bd
+JOIN 
+    Donor_Visit dv ON bd.bd_ID = dv.bd_ID
+GROUP BY 
+    bd.bd_name
+HAVING 
+    COUNT(dv.visit_id) > 1;
+    
+-- 2. Which recipients have urgent requests, and what blood groups and quantities are required?
+SELECT 
+    r.reci_name, 
+    r.reci_Brgp, 
+    r.reci_Bqnty 
+FROM 
+    Recipient r
+WHERE 
+    r.urgency_level = 'High';
+    
+-- 3. What is the inventory status for each blood group after fulfilling pending requests?
+SELECT 
+    bi.blood_group,
+    bi.quantity AS initial_quantity,
+    COALESCE(SUM(br.quantity_requested), 0) AS total_requested,
+    (bi.quantity - COALESCE(SUM(br.quantity_requested), 0)) AS remaining_quantity
+FROM 
+    Blood_Inventory bi
+LEFT JOIN 
+    Blood_Request br 
+    ON bi.blood_group = br.blood_group AND br.status = 'Pending'
+GROUP BY 
+    bi.blood_group, bi.quantity;
+    
+-- 4. Which blood groups are in short supply (less than 10 units) in the inventory?
+SELECT 
+    blood_group, 
+    quantity 
+FROM 
+    Blood_Inventory
+WHERE 
+    quantity < 10;
+
+-- 5. List hospitals in cities where donors have donated at least 1 liter of blood collectively.
+SELECT 
+    hi.hosp_name, 
+    c.City_name, 
+    SUM(dv.blood_quantity_donated) AS total_donated
+FROM 
+    Donor_Visit dv
+JOIN 
+    Blood_Donor bd ON dv.bd_ID = bd.bd_ID
+JOIN 
+    City c ON bd.City_ID = c.City_ID
+JOIN 
+    Hospital_Info_1 hi ON c.City_ID = hi.City_ID
+GROUP BY 
+    hi.hosp_name, c.City_name
+HAVING 
+    SUM(dv.blood_quantity_donated) >= 1;
+    
+-- 6. Find the blood group most frequently requested by recipients.
+
+SELECT 
+    blood_group, 
+    COUNT(*) AS request_count
+FROM 
+    Blood_Request
+GROUP BY 
+    blood_group
+ORDER BY 
+    request_count DESC
+LIMIT 1;
+
+-- 7. Which managers are handling the most requests, and how many requests are they managing?
+
+SELECT 
+    bm.mName, 
+    COUNT(br.request_id) AS total_requests
+FROM 
+    BB_Manager bm
+JOIN 
+    Recipient r ON bm.M_id = r.M_id
+JOIN 
+    Blood_Request br ON r.reci_ID = br.reci_ID
+GROUP BY 
+    bm.mName
+ORDER BY 
+    total_requests DESC;
+    
+-- 8. Which cities have the highest number of blood donors?
+
+SELECT 
+    c.City_name, 
+    COUNT(bd.bd_ID) AS total_donors
+FROM 
+    City c
+JOIN 
+    Blood_Donor bd ON c.City_ID = bd.City_ID
+GROUP BY 
+    c.City_name
+ORDER BY 
+    total_donors DESC;
+
+-- 9. Which donors have never visited for donation but are registered in the system?
+SELECT 
+    bd.bd_name 
+FROM 
+    Blood_Donor bd
+LEFT JOIN 
+    Donor_Visit dv ON bd.bd_ID = dv.bd_ID
+WHERE 
+    dv.visit_id IS NULL;
+
+-- 10. Which blood group has the highest average donation frequency?
+
+SELECT 
+    bd.bd_Bgroup, 
+    AVG(bd.donation_frequency) AS avg_frequency
+FROM 
+    Blood_Donor bd
+GROUP BY 
+    bd.bd_Bgroup
+ORDER BY 
+    avg_frequency DESC;
+
